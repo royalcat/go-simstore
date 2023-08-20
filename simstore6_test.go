@@ -9,33 +9,33 @@ const size = 1000000
 const queries = 1000000
 
 func TestAdd3(t *testing.T) {
-	s := New3(size, NewU64Slice)
+	s := New3[uint64](size, NewU64Slice)
 	testAdd(t, s, size, queries, 3)
 }
 
 func TestAdd3Small(t *testing.T) {
-	s := New3Small(size)
+	s := New3Small[uint64](size)
 	testAdd(t, s, size, queries, 3)
 }
 
 func TestAdd6(t *testing.T) {
-	s := New6(size, NewU64Slice)
+	s := New6[uint64](size, NewU64Slice)
 	testAdd(t, s, size, queries, 6)
 }
 
 func TestAdd3Z(t *testing.T) {
-	s := New3(size, NewZStore)
+	s := New3[uint64](size, NewZStore)
 	testAdd(t, s, size, queries/100, 3)
 }
 
 func TestAdd6Z(t *testing.T) {
-	s := New6(size, NewZStore)
+	s := New6[uint64](size, NewZStore)
 	testAdd(t, s, size, queries/100, 6)
 }
 
 func testAdd(t *testing.T, s Storage, size, queries, d int) {
 
-	rand.Seed(0)
+	rand := rand.New(rand.NewSource(0))
 
 	for i := 0; i < size; i++ {
 		s.Add(uint64(rand.Int63()), uint64(i))

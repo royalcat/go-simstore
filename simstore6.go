@@ -6,16 +6,16 @@ type Storage interface {
 	Finish()
 }
 
-type Store6 struct {
-	Store
+type Store6[D any] struct {
+	Store[D]
 }
 
-func New6(hashes int, newStore func(hashes int) u64store) *Store6 {
-	var s Store6
+func New6[D any](hashes int, newStore func(hashes int) u64store) *Store6[D] {
+	var s Store6[D]
 	s.rhashes = make([]u64store, 49)
 
 	if hashes != 0 {
-		s.docids = make(table, 0, hashes)
+		s.docids = make(table[D], 0, hashes)
 		for i := range s.rhashes {
 			s.rhashes[i] = newStore(hashes)
 		}
@@ -24,13 +24,13 @@ func New6(hashes int, newStore func(hashes int) u64store) *Store6 {
 	return &s
 }
 
-// Add inserts a signature and document id into the store
-func (s *Store6) Add(sig uint64, docid uint64) {
+// Add inserts a signature and document into the store
+func (s *Store6[D]) Add(sig uint64, doc D) {
 	t := 0
 
 	var p uint64
 
-	s.docids = append(s.docids, entry{hash: sig, docid: docid})
+	s.docids = append(s.docids, entry[D]{hash: sig, doc: doc})
 
 	for i := 0; i < 6; i++ {
 		p = sig
@@ -79,7 +79,7 @@ func (s *Store6) Add(sig uint64, docid uint64) {
 	s.rhashes[t].add(p)
 }
 
-func (*Store6) unshuffle(sig uint64, t int) uint64 {
+func (*Store6[D]) unshuffle(sig uint64, t int) uint64 {
 
 	t7 := t % 7
 	shift := 8 * uint64(t7)
@@ -112,7 +112,7 @@ func (*Store6) unshuffle(sig uint64, t int) uint64 {
 	return sig
 }
 
-func (s *Store6) unshuffleList(sigs []uint64, t int) []uint64 {
+func (s *Store6[D]) unshuffleList(sigs []uint64, t int) []uint64 {
 	for i := range sigs {
 		sigs[i] = s.unshuffle(sigs[i], t)
 	}
@@ -127,7 +127,7 @@ const mask6_10_7 = 0xffff800000000000
 
 // Find searches the store for all hashes hamming distance 6 or less from the
 // query signature.  It returns the associated list of document ids.
-func (s *Store6) Find(sig uint64) []uint64 {
+func (s *Store6[D]) Find(sig uint64) []D {
 
 	// empty store
 	if len(s.docids) == 0 {
@@ -170,31 +170,36 @@ func (s *Store6) Find(sig uint64) []uint64 {
 	p = sig
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_8, 6), t)...)
 	t++
+
 	p = (sig & 0xffc0003fffffffff) | (sig & 0x003fc00000000000 >> 8) | (sig & 0x00003fc000000000 << 8)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_8, 6), t)...)
 	t++
+
 	p = (sig & 0xffc03fc03fffffff) | (sig & 0x003fc00000000000 >> 16) | (sig & 0x0000003fc0000000 << 16)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_8, 6), t)...)
 	t++
+
 	p = (sig & 0xffc03fffc03fffff) | (sig & 0x003fc00000000000 >> 24) | (sig & 0x000000003fc00000 << 24)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_8, 6), t)...)
 	t++
+
 	p = (sig & 0xffc03fffffc03fff) | (sig & 0x003fc00000000000 >> 32) | (sig & 0x00000000003fc000 << 32)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_8, 6), t)...)
 	t++
+
 	p = (sig & 0xffc07fffffffc07f) | (sig & 0x003f800000000000 >> 40) | (sig & 0x0000000000003f80 << 40)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_7, 6), t)...)
 	t++
+
 	p = (sig & 0xffc07fffffffff80) | (sig & 0x003f800000000000 >> 47) | (sig & 0x000000000000007f << 47)
 	ids = append(ids, s.unshuffleList(s.rhashes[t].find(p, mask6_10_7, 6), t)...)
-	t++
 
 	ids = unique(ids)
 
-	var docids []uint64
+	var docs []D
 	for _, v := range ids {
-		docids = append(docids, s.docids.find(v)...)
+		docs = append(docs, s.docids.find(v)...)
 	}
 
-	return docids
+	return docs
 }

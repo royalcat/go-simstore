@@ -147,6 +147,9 @@ func (z zstore) decompressBlock(block int) (u64slice, error) {
 	prev := sig
 	for {
 		samebits, err := z.d.ReadSymbol(br)
+		if err != nil {
+			return nil, ErrCorruptFile
+		}
 		if samebits == huff.EOF {
 			break
 		}

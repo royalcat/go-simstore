@@ -1,0 +1,8 @@
+github.com/dchest/siphash v1.2.3 h1:QXwFc8cFOR2dSa/gE6o/HokBMWtLUaNDVd+22aKHeEA=
+github.com/dchest/siphash v1.2.3/go.mod h1:0NvQU092bT0ipiFN++/rXm69QG9tVxLAlQHIXMPAkHc=
+github.com/dgryski/go-bits v0.0.0-20180113010104-bd8a69a71dc2 h1:2+yip7nN/auel0PDwY7SIaTOxQPI2NwdkZkvpgtc3Pk=
+github.com/dgryski/go-bits v0.0.0-20180113010104-bd8a69a71dc2/go.mod h1:/9UYwwvZuEgp+mQ4960SHWCU1FS+FgdFX+m5ExFByNs=
+github.com/dgryski/go-bitstream v0.0.0-20180413035011-3522498ce2c8 h1:akOQj8IVgoeFfBTzGOEQakCYshWD6RNo1M5pivFXt70=
+github.com/dgryski/go-bitstream v0.0.0-20180413035011-3522498ce2c8/go.mod h1:VMaSuZ+SZcx/wljOQKvp5srsbCiKDEb6K2wC4+PiBmQ=
+github.com/dgryski/go-huff v0.0.0-20151109211320-89573a3ee09c h1:4hAVTUnEioXWxzIdjT8UztQBPEP9azLrYQtJFP53gFU=
+github.com/dgryski/go-huff v0.0.0-20151109211320-89573a3ee09c/go.mod h1:fS4jKGORR/ltFo6BZNbsqyW6KAcXeha/+g2KjMbPZSA=

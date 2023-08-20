@@ -5,12 +5,12 @@ import (
 	"math"
 	"math/rand"
 
-	"github.com/dgryski/go-simstore/simhash"
+	"github.com/royalcat/go-simstore/simhash"
 )
 
 type Item struct {
-	Sig  uint64
-	ID uint64
+	Sig uint64
+	ID  uint64
 }
 
 func hamming(a, b uint64) float64 { return float64(simhash.Distance(a, b)) }

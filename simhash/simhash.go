@@ -40,6 +40,6 @@ func Hash(scanner FeatureScanner) uint64 {
 	return shash
 }
 
-func Distance(v1 uint64, v2 uint64) int {
-	return int(bits.Popcnt(v1 ^ v2))
+func Distance(v1 uint64, v2 uint64) uint64 {
+	return bits.Popcnt(v1 ^ v2)
 }

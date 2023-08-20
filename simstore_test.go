@@ -8,7 +8,7 @@ import (
 func TestUnshuffle(t *testing.T) {
 
 	f := func(hash uint64) bool {
-		s := New3(1, NewU64Slice)
+		s := New3[uint64](1, NewU64Slice)
 		s.Add(hash, 0)
 
 		for i := range s.rhashes {
@@ -26,7 +26,7 @@ func TestUnshuffle(t *testing.T) {
 func TestUnshuffle6(t *testing.T) {
 
 	f := func(hash uint64) bool {
-		s := New6(1, NewU64Slice)
+		s := New6[uint64](1, NewU64Slice)
 		s.Add(hash, 0)
 
 		for i := range s.rhashes {
